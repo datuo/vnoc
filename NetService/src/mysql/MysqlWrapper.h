@@ -6,9 +6,9 @@
 #include <string>
 #include "MySQL/mysql.h"
 
-#pragma comment (lib,"lib/libmysql.lib")
+#pragma comment (lib,"../../../lib/libmysql.lib")
 
-typedef std::string string;
+using std::string;
 
 
 #define   MW_SQL_OK   0

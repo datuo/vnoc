@@ -162,11 +162,15 @@
     <ClCompile Include="..\..\..\..\Message\MessageParser.cpp" />
     <ClCompile Include="..\..\..\..\Message\MsgDef.cpp" />
     <ClCompile Include="..\..\..\..\Message\PackMessage.cpp" />
+    <ClCompile Include="..\..\mysql\MysqlWrapper.cpp" />
     <ClCompile Include="..\..\testUserManage.cpp" />
     <ClCompile Include="..\..\VnocProtocol.cpp" />
     <ClCompile Include="..\EchoTestHandlerTest.cpp" />
     <ClCompile Include="..\testRunner.cpp" />
     <ClCompile Include="..\VnocMessageHandlerTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\mysql\MysqlWrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
