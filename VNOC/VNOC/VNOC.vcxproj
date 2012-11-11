@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F5DBD0C4-9857-46E2-B401-D831D1CA4BF5}</ProjectGuid>
+    <ProjectGuid>{06E90441-F473-4E9E-99C9-F482C1073E0E}</ProjectGuid>
     <RootNamespace>VNOC</RootNamespace>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>

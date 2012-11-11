@@ -11,31 +11,42 @@ class PackMessage
 {
 public:
 
-	PackMessage(){}
+	PackMessage(){
+		CommandListPos = 0;
+	}
 	~PackMessage(){}
 
 public:
 
-	int Pack( const CMessage* const msg, byte* buf, size_t len);
+	int Pack( CMessage* const msg, byte* buf, size_t len);
 
 	int GetMessageLen(const CMessage* const msg);
 
-private:
-	
-	int _Pack( MSG_AVC* const avc, byte* buf, size_t len);
-
-	int _Pack( MSG_RVC* const rvc, byte* buf, size_t len);
-
-	int _Pack( MSG_ALI* const ali, byte* buf, size_t len);
-
-	int _Pack( MSG_RLI* const rli, byte* buf, size_t len);
-
-	int _Pack( MSG_APS* const asp, byte* buf, size_t len);
-
-	int _Pack( MSG_RPS* const rsp, byte* buf, size_t len);
+private:	
 
 	int _Head( CMessage* const msg_clss,byte* buf, size_t len);
+
 	int _Tail( CMessage* const msg_clss,byte* buf,int index ,size_t len);
+
+private:
+
+	int _CreateCommandLenList(CMessage* const in_PackMessage, byte* buf, int in_index);
+
+	void _PushCommandLenList(int len);
+
+	void _CloseCommandLenList();
+
+	int _PushCommandList(const byte* const in_Command, int len);
+
+	int _CreateCommandList(byte* buf,int in_index);
+
+	void _CloseCommandList();
+
+private:
+
+	std::vector<uint> m_CommandLenList;
+	std::vector<std::vector<byte> > m_CommandList;
+	int  CommandListPos;
 
 };
 
