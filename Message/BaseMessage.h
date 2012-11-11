@@ -179,17 +179,67 @@ protected:
 	void   SetParam( uint Pos,const byte* in_Param_byte_Ptr,uint len);
 
 	void   SetParam( uint Pos, uint  in_Param_int);
+public:
+	template<typename Type>
+	void SetParam( uint Pos, std::vector<Type> PeopleList )
+	{
+		if (PeopleList.empty())
+		{
+			return;
+		}
+		byte tmpByte[4] = {0};
+		byte* tmpParam = (byte*)new Type[PeopleList.size() * sizeof(Type)];
+		memset(tmpParam,0,PeopleList.size() * sizeof(Type));
+		int  tmpInt = 0;
+		for (int index = 0,ParamPos = 0; index <  (int)PeopleList.size();index++)
+		{
+			IntTobyte(PeopleList[index],tmpByte);
+			for (int i = 0; i < sizeof(Type); i++,ParamPos++)
+			{
+				tmpParam[ParamPos] = tmpByte[i];
+			}
+			memset(tmpByte,0,4);
+		}
+		SetParam(Pos,tmpParam,PeopleList.size() * sizeof(Type));
+		if (tmpParam != NULL)
+		{
+			delete[] tmpParam;
+			tmpParam = NULL;
+		}
+	}
 
 	template<typename Type>
-	void   SetParam( uint Pos, std::vector<Type> PeopleList);
+	Type GetParam( uint int_index, std::vector<Type>& PeopleList ) const
+	{
+		std::vector<std::vector<Type> > ComTmpList;
+		if (m_ComCommandList[int_index].second.size() == 0)
+		{
+			return 1;
+		}
+		if ((m_ComCommandList[int_index].second.size() % sizeof(Type) ) != 0)
+		{
+			return 1;
+		}
+		ComTmpList.resize(((int)m_ComCommandList[int_index].second.size() / sizeof(Type)));
+		for (int i = 0,index = 0;index < ((int)m_ComCommandList[int_index].second.size() / sizeof(Type)) ;index++)
+		{
+			for (int j = 0; j < sizeof(Type); i++)
+			{
+				ComTmpList[index].push_back(m_ComCommandList[int_index].second[i]);
+			}
+		}
 
+		for (int i = 0; i < (int)ComTmpList.size(); i++)
+		{
+			PeopleList.push_back(byteToInt((byte*)ComTmpList[i].data(),sizeof(Type)));
+		}
+		return 0;
+	}
+protected:
 	//子类必须初始化 
 	virtual void   InitiaPack(int in_ComType, int in_ComNum);
 
 	virtual uint   GetParamLen(uint int_index) const;
-
-	template<typename Type>
-    Type  GetParam(uint int_index,std::vector<Type>& PeopleList) const;
 
 	virtual const  byte*  GetParam(uint int_index) const;
 

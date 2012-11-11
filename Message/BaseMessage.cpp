@@ -292,61 +292,8 @@ void CMessage::SetParam( uint Pos,uint in_Param_int )
 		m_ComCommandList[Pos].second.push_back(tmpByte[index]);
 	}
 }
-template<typename Type>
-void CMessage::SetParam( uint Pos, std::vector<Type> PeopleList )
-{
-	if (PeopleList.empty())
-	{
-		return;
-	}
-	byte tmpByte[4] = {0};
-	byte* tmpParam = new Type[PeopleList.size() * sizeof(Type)];
-	memset(tmpParam,0,PeopleList.size() * sizeof(Type));
-	int  tmpInt = 0;
-	for (int index = 0,ParamPos = 0; index <  (int)PeopleList.size();index++)
-	{
-		IntTobyte(PeopleList[index],tmpByte);
-		for (int i = 0; i < sizeof(Type); i++,ParamPos++)
-		{
-			tmpParam[ParamPos] = tmpByte[i];
-		}
-		memset(tmpByte,0,4);
-	}
-	SetParam(Pos,tmpParam,PeopleList.size() * sizeof(Type));
-	if (tmpParam != NULL)
-	{
-		delete[] tmpParam;
-		tmpParam = NULL;
-	}
-}
 
-template<typename Type>
-Type CMessage::GetParam( uint int_index, std::vector<Type>& PeopleList ) const
-{
-	std::vector<std::vector<Type> > ComTmpList;
-	if (m_ComCommandList[int_index].second.size() == 0)
-	{
-		return 1;
-	}
-	if ((m_ComCommandList[int_index].second.size() % sizeof(Type) ) != 0)
-	{
-		return 1;
-	}
-	ComTmpList.resize(((int)m_ComCommandList[int_index].second.size() / sizeof(Type)));
-	for (int i = 0,index = 0;index < ((int)m_ComCommandList[int_index].second.size() / sizeof(Type)) ;index++)
-	{
-		for (int j = 0; j < sizeof(Type); i++)
-		{
-			ComTmpList[index].push_back(m_ComCommandList[int_index].second[i]);
-		}
-	}
 
-	for (int i = 0; i < (int)ComTmpList.size(); i++)
-	{
-		PeopleList.push_back(byteToInt((byte*)ComTmpList[i].data(),sizeof(Type)));
-	}
-	return 0;
-}
 
 uint CMessage::GetParamLen( uint int_index ) const
 {
