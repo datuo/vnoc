@@ -3,6 +3,19 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include "..\..\Message\PackMessage.h"
 #include <string.h>
+#include <vector>
+
+ int CheckMsgTrue(const byte* in_byte_ptr_o,const byte* in_byte_ptr_t,int len)
+ {
+	 for (int i = 0; i < len; i++)
+	 {
+		 if (in_byte_ptr_o[i] != in_byte_ptr_t[i])
+		 {
+			 return i;
+		 }
+	 }
+	 return 0;
+ }
 
 
 class testPackMessage :public CppUnit::TestFixture
@@ -14,6 +27,7 @@ class testPackMessage :public CppUnit::TestFixture
 	CPPUNIT_TEST( MSGRLIPackTest );
 	CPPUNIT_TEST( MSGAPSPackTest );
 	CPPUNIT_TEST( MSGRPSPackTest );
+	CPPUNIT_TEST( MSGACIPackTest );
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -94,7 +108,11 @@ public:
 		CPPUNIT_ASSERT(msg_avc.GetCaptchaType() == 0x1e);
 		CPPUNIT_ASSERT(msg_pack.Pack(&msg_avc,testPackAVC,msg_pack.GetMessageLen(&msg_avc)) != -1);
 		//与正确包对比
+
+		//std::cout<<CheckMsgTrue(testAVC,testPackAVC,sizeof(testAVC))<<std::endl;
+
 		CPPUNIT_ASSERT(memcmp(testAVC,testPackAVC,sizeof(testAVC)) == 0);
+
 
 		CPPUNIT_ASSERT(true);
 	}
@@ -492,6 +510,140 @@ public:
 
 		//与正确包对比
 		CPPUNIT_ASSERT(memcmp(testALI,testPackALI,sizeof(testALI)) == 0);
+
+		CPPUNIT_ASSERT(true);
+	}
+
+	void MSGACIPackTest()
+	{
+		byte testParamO [] = {0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02};
+		byte testParamT [] = {0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03};
+		byte testParamS [] = {0x04,0x04,0x04,0x04,
+			0x04,0x04,0x04,0x04,
+			0x04,0x04,0x04,0x04,
+			0x04,0x04,0x04,0x04};
+
+		byte testACI [] = {0x56,
+			0x00,
+			0x00,0x01,
+			0x00,0x00,0x00,0x8D,
+
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+
+			0x21,
+			0x00,0x00,0x00,0x00,
+
+			0x0A,
+
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x10,
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x10,
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x04,
+			0x00,0x00,0x00,0x08,
+			0x00,0x00,0x00,0x04,
+
+			0x00,0x00,0x00,0x01,
+
+			0x00,0x00,0x00,0x01,
+
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+			0x02,0x02,0x02,0x02,
+
+			0x00,0x00,0x00,0x01,
+
+			0x00,0x00,0x00,0x01,
+
+			0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03,
+			0x03,0x03,0x03,0x03,
+
+			0x00,0x00,0x00,0x01,
+
+			0x00,0x00,0x00,0x01,
+
+			0x00,0x00,0x00,0x0A,
+			0x00,0x00,0x00,0x0B,
+
+			0x00,0x00,0x00,0x01,
+
+			0x00,0x00,
+			0x43};
+
+		byte testPackACI[141] = {0};
+
+		//ACI
+		MSG_ACI msg_aci;
+		PackMessage msg_pack;
+
+
+
+		msg_aci.SetSerial(1);
+		CPPUNIT_ASSERT(msg_aci.GetSerial() == 1);
+
+		msg_aci.SetGUID(testParamO);
+		CPPUNIT_ASSERT(memcmp(msg_aci.GetGUID(),testParamO,sizeof(byte) * 16) == 0);
+
+		msg_aci.SetRoomID(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomID() == 1);
+
+		msg_aci.SetRoomManageID(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomManageID() == 1);
+
+		msg_aci.SetRoomName(testParamO,16);
+		CPPUNIT_ASSERT(memcmp(msg_aci.GetRoomName(),testParamO,sizeof(byte) * 16) == 0);
+
+		msg_aci.SetRoomPassword(testParamT,16);
+		CPPUNIT_ASSERT(memcmp(msg_aci.GetRoomPassword(),testParamT,sizeof(byte) * 16) == 0);
+
+		std::vector<int> inList;
+		std::vector<int> outList;
+		inList.push_back(10);
+		inList.push_back(11);
+		msg_aci.SetRoomPeopleList(inList);
+
+/*
+		msg_aci.GetRoomPeopleList(outList);
+		CPPUNIT_ASSERT(outList[0] == 10);
+		CPPUNIT_ASSERT(outList[1] == 11);*/
+
+		msg_aci.SetRoomPeopleNum(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomPeopleNum() == 1);
+
+		msg_aci.SetRoomPeopleNumMax(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomPeopleNumMax() == 1);
+
+		msg_aci.SetRoomRank(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomRank() == 1);
+
+		msg_aci.SetRoomState(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomState() == 1);
+
+		msg_aci.SetRoomType(1);
+		CPPUNIT_ASSERT(msg_aci.GetRoomType() == 1);
+
+
+		CPPUNIT_ASSERT(msg_pack.GetMessageLen(&msg_aci) == sizeof (testACI));
+		CPPUNIT_ASSERT(msg_pack.Pack(&msg_aci,testPackACI,msg_pack.GetMessageLen(&msg_aci)) != -1);
+
+		//与正确包对比
+		int a = CheckMsgTrue(testACI,testPackACI,sizeof(testACI));
+		CPPUNIT_ASSERT(memcmp(testACI,testPackACI,sizeof(testACI)) == 0);
 
 		CPPUNIT_ASSERT(true);
 	}

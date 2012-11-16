@@ -169,7 +169,7 @@ int CMessageParser::_Body(CMessage* _Messsage,byte* lpszData,size_t len)
 		{
 			tmpComlLen[index] = _Messsage->m_ComListLen[j];
 		}
-		ParamLen += byteToInt(tmpComlLen,4);
+		ParamLen += BigLittleSwap32(byteToInt(tmpComlLen,4));
 		memset(tmpComlLen,0,MSG_CLASS_PARAM);
 	}
 

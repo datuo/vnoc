@@ -112,23 +112,24 @@ int PackMessage::_CreateCommandLenList(CMessage* const in_PackMessage, byte* buf
 	}
 	byte* ComLenList = new byte[m_CommandLenList.size() * 4];
 	memset(ComLenList,0,m_CommandLenList.size() * 4);
-	for (int i = 0; i < (int)m_CommandLenList.size();i++)
+	for (int i = 0,index = 0; i < (int)m_CommandLenList.size();i++)
 	{
 		byte tmpComLen[4] = {0};
 		IntTobyte(m_CommandLenList[i],tmpComLen);
-		for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++,index++)
 		{
-			ComLenList[i] = tmpComLen[i];
+			ComLenList[index] = tmpComLen[j];
 		}
 	}
 
-	//打包参数长度
-	for (int i = 0; in_index < (int)(m_CommandLenList.size() * 4); in_index++, i++)
-	{
-		buf[in_index] = in_PackMessage->GetComListLen(i);
-	}
 	//存入类中
 	in_PackMessage->SetComListLen(ComLenList,m_CommandLenList.size());
+
+	//打包参数长度
+	for (int i = 0; i < (int)(m_CommandLenList.size() * 4);in_index++, i++)
+	{
+		buf[in_index] = ComLenList[i];
+	}
 	if (ComLenList != NULL)
 	{
 		delete [] ComLenList;
@@ -219,16 +220,18 @@ int PackMessage::Pack(CMessage* const msg, byte* buf, size_t len )
 
 	//创建参数长度列表
 	CHECKUP_DATALEN(index,len);
-	index += _CreateCommandLenList(msg,buf,index);
+	index = _CreateCommandLenList(msg,buf,index);
+
+	m_CommandList.resize(msg->m_ComCommandList.size());
 
 	for (int i = 0; i < (int)msg->m_ComCommandList.size(); i++)
 	{
-		_PushCommandList(msg->GetComCommandList(i),msg->m_ComCommandList[i].first);
+		_PushCommandList(msg->GetComCommandList(i),msg->m_ComCommandList[i].second.size());
 	}
 
 	//创建参数列表
 	CHECKUP_DATALEN(index,len);
-	index += _CreateCommandList(buf,index);
+	index = _CreateCommandList(buf,index);
 
 	//Tail
 	return _Tail(msg,buf,index,len);

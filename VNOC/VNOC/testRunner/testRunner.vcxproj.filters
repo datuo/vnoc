@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\MSG_CLASS">
+      <UniqueIdentifier>{3b186a94-0aef-4736-a12c-650c3beb1a01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\test\testRunner.cpp">
@@ -27,9 +30,6 @@
     <ClCompile Include="..\..\..\Message\MessageParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Message\MsgDef.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Message\PackMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,14 +41,44 @@
     <ClInclude Include="..\..\..\Message\MessageParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Message\MsgDef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Message\PackMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Message\BaseMessage.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_ACI.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_ACL.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_APS.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_AVC.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_RCI.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_RCL.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_RLI.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_RPS.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_RVC.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_UNION.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Message\MSG_ALI.h">
+      <Filter>Header Files\MSG_CLASS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

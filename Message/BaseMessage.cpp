@@ -257,16 +257,35 @@ void CMessage::_Close()
 	//保留
 }
 
-void CMessage::SetParam( uint Pos,byte in_Param_byte )
+
+int CMessage::MateParam( std::string in_str ) const
 {
+	auto iter = m_ParamMate.find(in_str);
+	if (iter != m_ParamMate.end())
+	{
+		return iter->second;
+	}
+	return -1;
+}
+
+void CMessage::SetParam( int Pos,byte in_Param_byte )
+{
+	if (Pos == -1)
+	{
+		return;
+	}
 	//将参数长度存放进表中
 	CMessage::SetParamLen(Pos,1);
 	m_ComCommandList[Pos].second.clear();
 	m_ComCommandList[Pos].second.push_back(in_Param_byte);
 }
 
-void CMessage::SetParam( uint Pos,const byte* in_Param_byte_Ptr,uint len )
+void CMessage::SetParam( int Pos,const byte* in_Param_byte_Ptr,uint len )
 {
+	if (Pos == -1)
+	{
+		return;
+	}
 	SetParamLen(Pos,len);
 	if (in_Param_byte_Ptr == NULL)
 	{
@@ -279,8 +298,12 @@ void CMessage::SetParam( uint Pos,const byte* in_Param_byte_Ptr,uint len )
 	}
 }
 
-void CMessage::SetParam( uint Pos,uint in_Param_int )
+void CMessage::SetParam( int Pos,uint in_Param_int )
 {
+	if (Pos == -1)
+	{
+		return;
+	}
 	SetParamLen(Pos,4);
 	byte tmpByte[4] = {0};
 	IntTobyte(in_Param_int,tmpByte);
@@ -292,8 +315,6 @@ void CMessage::SetParam( uint Pos,uint in_Param_int )
 		m_ComCommandList[Pos].second.push_back(tmpByte[index]);
 	}
 }
-
-
 
 uint CMessage::GetParamLen( uint int_index ) const
 {
@@ -318,9 +339,13 @@ void CMessage::SetParamLen( uint int_index, int int_Value )
 
 }
 
-const byte* CMessage::GetParam( uint int_index ) const
+const byte* CMessage::GetParam( int int_index )  const
 {
-	if (int_index > m_ComCommandList.size())
+	if (int_index == -1)
+	{
+		return 0;
+	}
+	if (int_index > (int)m_ComCommandList.size())
 	{
 		return 0;
 	}
@@ -346,3 +371,5 @@ void CMessage::InitiaPack( int in_ComType, int in_ComNum )
 	//留好参数空间
 	SetComCommandList(m_CmlCount);
 }
+
+

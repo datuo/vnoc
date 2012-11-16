@@ -1,7 +1,6 @@
 
-#pragma once
-
-
+#ifndef VNOC_MSG_CMESSAGE
+#define VNOC_MSG_CMESSAGE
 /*
 #define  MSG_ERROR_BDMISS  1
 #define  MSG_ERROR_COMMAND 2
@@ -10,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <algorithm> 
 
@@ -85,6 +85,8 @@ typedef  unsigned char byte;
 typedef  unsigned int  uint;
 typedef unsigned short ushort;
 
+typedef std::map<std::string,int> EnumFunList;
+typedef std::map<std::string,int>::iterator EnumFunList_Iterator;
 
 typedef std::vector<byte> ByteArr;
 
@@ -102,6 +104,57 @@ typedef std::vector<byte> ByteArr;
 uint byteToInt(const byte* in_byte,size_t len);
 
 void IntTobyte(int in_int,byte* out_byte);
+
+
+#define OBJECT_PARAM_LIST  m_ParamMate
+
+#define Mate_Param  MateParam
+
+#define BEGIN_PARAM_LIST  int __Param_List_Begin = 0;
+
+#define ADD_PARAM_LIST(PARAM_NAME)	  OBJECT_PARAM_LIST[PARAM_NAME] = __Param_List_Begin++;
+
+#define INIT_PARAM_OBJEDT(COMMAND_TAG) CMessage::InitiaPack(COMMAND_TAG,__Param_List_Begin);
+
+#define END_PARAM_LIST 
+
+#define SetParam_t_ptr(x,y,z)  {SetParam(Mate_Param(x),y,z);}
+
+#define SetParam_t_tamp(x,y,z)  {SetParam<y>(Mate_Param(x),z);}
+
+#define SetParam_t(x,y)  {SetParam(Mate_Param(x),y);}
+
+#define GetParamLen_t_r(x) {return  CMessage::GetParamLen(Mate_Param(x));}
+
+//#define GetParam_t(x)  {GetParam(x);}
+
+#define GetParam_t_r(x)  { return GetParam(Mate_Param(x)); }
+
+#define GetParam_t_tamp_r(x,y,z)  { return GetParam<y>(Mate_Param(x),z); }
+
+#define GetParam_t_byte_r_int(x,len)  { return byteToInt(GetParam(Mate_Param(x)),len); }
+
+#define GetParam_t_int_r(x,len)  { return BigLittleSwap32(byteToInt(GetParam(Mate_Param(x)),len)); }
+
+/*
+class MakeParam
+{
+public:	
+
+	int MateParam( std::string in_str )
+	{
+		
+		return -1;
+	}
+
+	EnumFunList& returnParamMakeObject(){ return m_ParamComList;}
+
+private:
+
+	EnumFunList m_ParamComList;
+};
+*/
+
 
 class CMessage
 {
@@ -171,24 +224,23 @@ public:
 
 	bool SetDataLen(uint in_Int);
 
-
 protected:
 
-	void   SetParam( uint Pos, byte in_Param_byte);
+	//模板函数特殊处理
 
-	void   SetParam( uint Pos,const byte* in_Param_byte_Ptr,uint len);
-
-	void   SetParam( uint Pos, uint  in_Param_int);
-public:
 	template<typename Type>
-	void SetParam( uint Pos, std::vector<Type> PeopleList )
+	void   SetParam( uint Pos, std::vector<Type> PeopleList)
 	{
+		if (Pos == -1)
+		{
+			return;
+		}
 		if (PeopleList.empty())
 		{
 			return;
 		}
 		byte tmpByte[4] = {0};
-		byte* tmpParam = (byte*)new Type[PeopleList.size() * sizeof(Type)];
+		byte* tmpParam = new byte[PeopleList.size() * sizeof(Type)];
 		memset(tmpParam,0,PeopleList.size() * sizeof(Type));
 		int  tmpInt = 0;
 		for (int index = 0,ParamPos = 0; index <  (int)PeopleList.size();index++)
@@ -208,48 +260,64 @@ public:
 		}
 	}
 
-	template<typename Type>
-	Type GetParam( uint int_index, std::vector<Type>& PeopleList ) const
-	{
-		std::vector<std::vector<Type> > ComTmpList;
-		if (m_ComCommandList[int_index].second.size() == 0)
-		{
-			return 1;
-		}
-		if ((m_ComCommandList[int_index].second.size() % sizeof(Type) ) != 0)
-		{
-			return 1;
-		}
-		ComTmpList.resize(((int)m_ComCommandList[int_index].second.size() / sizeof(Type)));
-		for (int i = 0,index = 0;index < ((int)m_ComCommandList[int_index].second.size() / sizeof(Type)) ;index++)
-		{
-			for (int j = 0; j < sizeof(Type); i++)
-			{
-				ComTmpList[index].push_back(m_ComCommandList[int_index].second[i]);
-			}
-		}
 
-		for (int i = 0; i < (int)ComTmpList.size(); i++)
+	template<typename Type>
+	Type  GetParam(uint int_index,std::vector<Type>& PeopleList) const
+	{
+		if (int_index != -1)
 		{
-			PeopleList.push_back(byteToInt((byte*)ComTmpList[i].data(),sizeof(Type)));
+			std::vector<std::vector<Type> > ComTmpList;
+			if (m_ComCommandList[int_index].second.size() == 0)
+			{
+				return 1;
+			}
+			if ((m_ComCommandList[int_index].second.size() % sizeof(Type) ) != 0)
+			{
+				return 1;
+			}
+			ComTmpList.resize(((int)m_ComCommandList[int_index].second.size() / sizeof(Type)));
+			for (int i = 0,index = 0;index < (int)(m_ComCommandList[int_index].second.size() / sizeof(Type)) ;index++)
+			{
+				for (int j = 0; j < sizeof(Type); i++)
+				{
+					ComTmpList[index].push_back(m_ComCommandList[int_index].second[i]);
+				}
+			}
+
+			for (int i = 0; i < (int)ComTmpList.size(); i++)
+			{
+				PeopleList.push_back(byteToInt((byte*)ComTmpList[i].data(),sizeof(Type)));
+			}
 		}
 		return 0;
 	}
+
 protected:
+
+	void   SetParam( int Pos, byte in_Param_byte);
+
+	void   SetParam( int Pos,const byte* in_Param_byte_Ptr,uint len);
+
+	void   SetParam( int Pos, uint  in_Param_int);
+
 	//子类必须初始化 
 	virtual void   InitiaPack(int in_ComType, int in_ComNum);
 
 	virtual uint   GetParamLen(uint int_index) const;
 
-	virtual const  byte*  GetParam(uint int_index) const;
+	virtual const  byte*  GetParam( int int_index ) const;
 
 	virtual void   SetParamLen(uint int_index, int int_Value);
 
 	//预留
 	//virtual int PopParam();
 
-
 protected:
+
+	int MateParam( std::string in_str ) const;
+
+	EnumFunList m_ParamMate;
+
 	bool  m_Begin;				  //标记消息的开始  统一字符'V"的ASCⅡ码 0x56
 	bool  m_End;				  //标记消息的结束  固定字符'C‘的ASCⅡ码 0x43
 	//参数列表    4字节，对应参数N的长度
@@ -278,3 +346,6 @@ private:
 	void   _Close();
 	int _MessageType() const;
 };
+
+
+#endif
