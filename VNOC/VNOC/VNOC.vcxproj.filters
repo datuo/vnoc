@@ -61,6 +61,9 @@
     <Filter Include="util\sha1">
       <UniqueIdentifier>{c02f1cda-9213-4df7-932a-10b0be8ed19e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message\MSG_CLASS">
+      <UniqueIdentifier>{149d3582-8343-448e-ab67-badcf1840f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HyperLink.cpp">
@@ -153,9 +156,6 @@
     <ClCompile Include="..\..\Message\MessageParser.cpp">
       <Filter>Message</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Message\MsgDef.cpp">
-      <Filter>Message</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Message\PackMessage.cpp">
       <Filter>Message</Filter>
     </ClCompile>
@@ -164,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="..\..\sha1\sha1.cpp">
       <Filter>util\sha1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Message\BaseMessage.cpp">
+      <Filter>Message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +311,6 @@
     <ClInclude Include="..\..\Message\MessageParser.h">
       <Filter>Message</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Message\MsgDef.h">
-      <Filter>Message</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Message\PackMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
@@ -322,6 +322,42 @@
     </ClInclude>
     <ClInclude Include="..\..\sha1\sha1.h">
       <Filter>util\sha1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_ACI.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_ACL.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_ALI.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_APS.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_AVC.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_RCI.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_RCL.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_RLI.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_RPS.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_RVC.h">
+      <Filter>Message\MSG_CLASS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\BaseMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Message\MSG_UNION.h">
+      <Filter>Message</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
