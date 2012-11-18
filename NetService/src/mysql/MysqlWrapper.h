@@ -4,10 +4,15 @@
 
 
 #include <string>
-#include "MySQL/mysql.h"
+#include "../../include/Mysql/mysql.h"
 
+<<<<<<< HEAD
 #pragma comment (lib,"../../../lib/libmysql.lib")
 
+=======
+
+
+>>>>>>> ca3fc75399d8d05c15384ec9237c1de11c03d244
 using std::string;
 
 
@@ -56,7 +61,12 @@ public:
 	
 	MYSQL_ROW  FetchNext();
 
+	MYSQL_ROW  First();
+
 	MWType* GetData(int index);
+	
+	//一个结果的结果集
+	MWType* GetOneData();
 
 	int GetField_Num(){
 		return m_Field_Num;

@@ -101,7 +101,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>cppunitd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../../../../VisualLeakDetector/lib/win32/vld.lib;cppunitd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -162,11 +162,18 @@
     <ClCompile Include="..\..\..\..\Message\MessageParser.cpp" />
     <ClCompile Include="..\..\..\..\Message\MsgDef.cpp" />
     <ClCompile Include="..\..\..\..\Message\PackMessage.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\..\mysql\MysqlWrapper.cpp" />
     <ClCompile Include="..\..\testUserManage.cpp" />
+=======
+    <ClCompile Include="..\..\FileUserStorage.cpp" />
+    <ClCompile Include="..\..\UserManage.cpp" />
+    <ClCompile Include="..\..\UserStorage.cpp" />
+>>>>>>> ca3fc75399d8d05c15384ec9237c1de11c03d244
     <ClCompile Include="..\..\VnocProtocol.cpp" />
     <ClCompile Include="..\EchoTestHandlerTest.cpp" />
     <ClCompile Include="..\testRunner.cpp" />
+    <ClCompile Include="..\testUserManage.cpp" />
     <ClCompile Include="..\VnocMessageHandlerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
